@@ -91,6 +91,7 @@ describe "Authentication" do
         specify { expect(response).to redirect_to(root_url) }
       end
     end
+    
     describe "as wrong user" do
       let(:user) { FactoryGirl.create(:user) }
       let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
