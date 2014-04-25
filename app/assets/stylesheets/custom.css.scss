@@ -239,3 +239,14 @@ aside {
     margin-bottom: 5px;
   }
 }
+
+.navbar {
+  background-color: #FF9933; /* fallback color, place your own */
+  border-bottom: none;
+}
+
+.pagination {
+      span.disabled {
+        color: #aaa !important;
+      }
+}
