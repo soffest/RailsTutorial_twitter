@@ -41,8 +41,7 @@ class User < ActiveRecord::Base
 
   def send_password_reset
     generate_token(:password_reset_token)
-    self.password_reset_sent_at = ( Time.zone.now)
-    #save!
+    self.password_reset_sent_at = ( Time.current )
     UserMailer.password_reset(self).deliver
   end
 
@@ -56,9 +55,19 @@ class User < ActiveRecord::Base
     where("name like ?", "%#{query}%") 
   end
 
+  def password_reset_token_fresh?
+    password_reset_sent_at < 2.hours.ago
+  end
+
+  def self.search_users(query = {})
+    users = all
+    users = search(query[:search]).order('created_at DESC') if query[:search]
+    users.paginate(page: query[:page])
+  end
+
   private
 
-    def create_remember_token
-      self.remember_token = User.encrypt(User.new_remember_token)
+  def create_remember_token
+    self.remember_token = User.encrypt(User.new_remember_token)
   end
 end
