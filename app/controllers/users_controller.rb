@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def index
     if params[:search]
-      @users = User.search(params[:search]).order("created_at DESC").paginate(page: params[:page])
+      @users = User.search_users(params.slice(:search, :page))
     else
       @users = User.paginate(page: params[:page])
     end
@@ -72,17 +72,17 @@ class UsersController < ApplicationController
 
   private
 
-    def user_params
-      params.require(:user).permit(:name, :email, :password,
-                                   :password_confirmation)
-    end
+  def user_params
+    params.require(:user).permit(:name, :email, :password,
+                                 :password_confirmation)
+  end
 
-    def correct_user
-      @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
-    end
+  def correct_user
+    @user = User.find(params[:id])
+    redirect_to(root_url) unless current_user?(@user)
+  end
 
-    def admin_user
-      redirect_to(root_url) unless current_user.admin?
-    end
+  def admin_user
+    redirect_to(root_url) unless current_user.admin?
+  end
 end
